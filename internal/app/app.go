@@ -152,6 +152,7 @@ type app struct {
 	backdropCache         backdropCache // the backdrop of Now Playing, as last painted
 	npArt                 *artwork      // the cover whose colors Now Playing shows
 	npCoverState          coverState    // the cover of Now Playing, as it is tilted and flicked
+	motionCover           motionCover   // the video that is the cover of the song that plays
 	wallState             wallState     // the wall of the queue's covers, as it is dragged
 	quiet                 quietState    // the quiet parts of the song playing, for its top comments
 	sig                   playerSig
@@ -312,6 +313,7 @@ func (a *app) sourceByID(id string) music.Source {
 
 // closeSources stops the plugins, which end with the app.
 func (a *app) closeSources() {
+	a.closeMotion()
 	for _, p := range a.plugins {
 		p.Close()
 	}

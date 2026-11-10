@@ -272,6 +272,19 @@ func (p *Plugin) Played(t music.Track) {
 	}
 }
 
+// MotionCover answers the address of the video that is the cover of a song's
+// album, if the plugin has "motionCover" and the album one: a file or an HLS
+// playlist, which loops muted where the cover is while the song plays.
+func (p *Plugin) MotionCover(id string) (string, error) {
+	var out struct {
+		URL string `json:"url"`
+	}
+	if err := p.call("motionCover", map[string]string{"id": id}, &out); err != nil {
+		return "", err
+	}
+	return out.URL, nil
+}
+
 func (p *Plugin) Lyrics(id string) (*music.Lyrics, error) {
 	var l music.Lyrics
 	if err := p.call("lyrics", map[string]string{"id": id}, &l); err != nil {

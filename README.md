@@ -100,6 +100,7 @@ Export a function for each thing the plugin does. Each takes one object of param
 | `likeComment` | `{trackId, commentId, on}` | |
 | `postComment` | `{trackId, text}` | `Comment` |
 | `lyrics` | `{id}` | `{lrc, translation}`, or `{lines}` with timed `words` |
+| `motionCover` | `{id}` | `{url}`, the video that is the cover of the song's album, a file or an HLS playlist, or `null`: it loops, muted, over the cover of the song that plays |
 | `stream` | `{id, quality}` | `{url, type, headers, size, gain, peak}`, where `type` is `mp3`, `flac`, `ogg`, `wav`, `m4a` (ALAC, FLAC or AAC-LC, whole or in fragments as a DASH stream serves it) or `aac` (AAC-LC in ADTS) |
 | `remotePlay` | `{ids, start, position}` | |
 | `remotePause`, `remoteResume` | | |

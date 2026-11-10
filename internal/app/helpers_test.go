@@ -67,6 +67,7 @@ type fakeSource struct {
 	account     func() (*music.Account, error)
 	search      func(query string, kind music.SearchKind, offset int) (*music.SearchResult, error)
 	suggest     func(query string) ([]string, error)
+	motionCover func(id string) (string, error)
 	playlists   func() ([]music.Playlist, error)
 	playlist    func(id string) (*music.Playlist, error)
 	album       func(id string) (*music.AlbumPage, error)
@@ -106,11 +107,21 @@ func newFakeSource(id string) *fakeSource {
 	for _, name := range capabilities {
 		s.caps[name] = true
 	}
+	// A cover that moves is asked for behind the views that show a song: only
+	// the tests of it have a source with one, for the rest not to wait on it.
+	delete(s.caps, "motionCover")
 	return s
 }
 
 func (s *fakeSource) Info() music.Info     { return s.info }
 func (s *fakeSource) Can(what string) bool { return s.caps[what] }
+
+func (s *fakeSource) MotionCover(id string) (string, error) {
+	if s.motionCover == nil {
+		return "", music.ErrUnsupported
+	}
+	return s.motionCover(id)
+}
 func (s *fakeSource) Setting(key string) string {
 	return s.vals[key]
 }

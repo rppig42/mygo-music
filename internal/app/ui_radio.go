@@ -329,7 +329,14 @@ func (a *app) radioCovers(c *ui.Context, tr *music.Track) {
 		front.AnimatePose(ui.Pose{Scale: scale}, ui.Animation{Spring: ui.SpringOptions{Duration: 600 * time.Millisecond, Bounce: 0.25}})
 		front.Children(func() {
 			ui.Box(c.Key(tr.ID)).Fill().Transition(ui.ElementTransition{Animation: &ui.Snappy, Enter: &ui.Motion{Scale: 0.92}}).
-				Children(func() { a.coverFill(c, tr.Album.ImageURL, 600, 16) })
+				Children(func() {
+					a.coverFill(c, tr.Album.ImageURL, 600, 16)
+					// A player shows in one place at a time: Now Playing's
+					// cover has it while that is open.
+					if !a.nowPlaying && !a.npOpen {
+						motionImage(c, a.motion(tr), 16)
+					}
+				})
 		})
 	})
 }
